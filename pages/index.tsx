@@ -1,118 +1,76 @@
-import Image from 'next/image'
-import { Inter } from 'next/font/google'
-
-const inter = Inter({ subsets: ['latin'] })
+import { useState, useEffect } from "react";
 
 export default function Home() {
+  const [prevScrollPos, setPrevScrollPos] = useState<number>(0);
+  const [visible, setVisible] = useState(true);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const handleScroll = () => {
+        const currentScrollPos = window.scrollY;
+        setVisible(prevScrollPos > currentScrollPos);
+        setPrevScrollPos(currentScrollPos);
+      };
+
+      //   handle if user is at the top of the page
+      if (prevScrollPos < 20) {
+        setVisible(true);
+      }
+
+      window.addEventListener("scroll", handleScroll);
+
+      return () => {
+        window.removeEventListener("scroll", handleScroll);
+      };
+    }
+  }, [prevScrollPos]);
+
   return (
-    <main
-      className={`flex min-h-screen flex-col items-center justify-between p-24 ${inter.className}`}
+    <div
+      style={{
+        fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif",
+      }}
     >
-      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">pages/index.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+      <nav
+        className={`navbar fixed left-0 top-0 h-52 w-full transform transition-transform duration-1000 ${
+          visible ? "translate-y-0" : "-translate-y-full"
+        }`}
+      >
+        <div className="flex h-20 items-center justify-center bg-blue-900 text-white">
+          <h1 className="text-2xl font-bold">Navbar</h1>
+        </div>
+      </nav>
+
+      <div className="min-h-screen max-w-screen-md mx-auto">
+        <div className="mt-24">
+          <p className="text-2xl font-light text-gray-600">{dummyContent}</p>
+          <p className="text-2xl font-light text-gray-600">{dummyContent}</p>
+          <p className="text-2xl font-light text-gray-600">{dummyContent}</p>
+          <p className="text-2xl font-light text-gray-600">{dummyContent}</p>
         </div>
       </div>
-
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700/10 after:dark:from-sky-900 after:dark:via-[#0141ff]/40 before:lg:h-[360px]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className="mb-32 grid text-center lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Discover and deploy boilerplate example Next.js&nbsp;projects.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  )
+    </div>
+  );
 }
+
+const dummyContent = `
+Pariatur nulla dolore anim ipsum dolore consectetur qui veniam excepteur amet cillum eu. Labore ad ut cupidatat est esse quis nulla ea ullamco laboris tempor. Officia do anim ad magna anim commodo duis sint occaecat consequat excepteur ut fugiat. Mollit Lorem esse adipisicing esse excepteur mollit.
+
+Consequat ipsum duis nulla consequat officia sit esse ex ullamco non excepteur. Elit amet cupidatat sunt dolor proident pariatur ullamco cillum ex proident officia eiusmod deserunt excepteur. Culpa sit nisi non amet commodo ea exercitation occaecat do sit sit do.
+
+Non enim fugiat exercitation velit quis dolore duis ad proident magna. Velit excepteur commodo officia duis esse pariatur anim ipsum reprehenderit nulla anim sint nulla. Amet proident fugiat nisi consequat Lorem veniam sint reprehenderit. Commodo ad ipsum excepteur duis aute anim commodo enim non sint. Anim enim consequat occaecat elit Lorem enim sunt sunt proident do veniam.
+
+Nostrud adipisicing veniam ullamco aliquip officia aute eu exercitation in ut. Irure elit enim laborum ex laborum id et elit. Irure nisi occaecat minim culpa voluptate ut. Ipsum sint tempor incididunt sunt ut pariatur qui deserunt tempor in esse culpa laboris.
+
+Laboris ex eiusmod irure adipisicing voluptate elit ipsum laboris et ad. Lorem dolor sunt non sunt magna incididunt Lorem pariatur cupidatat. Eiusmod aute sit cillum nostrud aute quis irure. Deserunt tempor est nulla eu eiusmod. Deserunt ea consectetur aliquip nulla.
+
+Consequat consectetur labore commodo exercitation commodo pariatur proident consequat. Amet dolore non nulla minim id exercitation sint laborum reprehenderit consectetur. Ipsum pariatur nisi irure commodo consectetur adipisicing culpa deserunt deserunt laborum quis ipsum. Non est mollit cillum ut. Tempor id in cillum consequat fugiat. Irure irure elit eu elit.
+
+Magna aute aliqua elit minim do mollit consectetur est officia enim aute. Est eiusmod culpa commodo voluptate id anim dolor. Amet adipisicing enim ullamco aliquip dolore Lorem adipisicing aliqua incididunt velit amet est.
+
+Excepteur esse in eu cupidatat dolore Lorem consequat voluptate. Pariatur ut culpa cillum excepteur enim commodo velit cupidatat ad ea consectetur. In ipsum mollit ea sint laboris commodo ad magna labore. Culpa deserunt et nulla cillum deserunt cupidatat irure exercitation magna. Quis exercitation eu laborum eu nulla officia sit dolore sunt deserunt culpa. Qui labore amet dolor amet culpa dolore incididunt enim pariatur commodo. Pariatur quis veniam occaecat tempor exercitation dolore nulla velit et adipisicing ut consequat deserunt excepteur.
+
+Elit non excepteur aute ipsum ea ex est est incididunt minim laboris. Fugiat tempor velit quis ipsum aute ipsum laboris consequat sint sint velit deserunt adipisicing et. Ut ipsum tempor ullamco laboris fugiat enim minim. Anim nulla tempor in eiusmod minim culpa mollit ullamco exercitation deserunt aliqua. Laboris est irure duis commodo velit consectetur nostrud. Tempor dolore ullamco elit deserunt.
+
+Laboris proident labore enim esse aute consectetur. Enim qui consectetur ea qui Lorem ad dolor proident sunt sunt. Minim non laborum reprehenderit sit adipisicing ad labore dolor.
+`;
